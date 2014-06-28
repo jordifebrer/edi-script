@@ -1,0 +1,32 @@
+htm  
+hea
+lin>rel:stylesheet>typ:text/css>hrf:css/test.css /lin
+scr>src:www.github.com /scr
+/hea
+bod>bg:green
+div>bg:red>cl:orange some text inside /div
+h1>bg:white title /h1
+div>id:qwerty
+ul
+li b>id:boldy bolder text /b /li
+li b spa>id:span_id text /spa /b /li
+some_text_in_the_middle
+p ok_paragraph spa new_span /spa /p
+a>hrf:www.github.com text /a
+a>hrf:www.github.com>id:link_id>fs:25px text /a
+/ul
+/div
+a>bg:blue>hrf:www.google.co.uk 'some text inside link' /a
+img>src:mock.jpg /img
+div>id:div_portal some text inside /div
+div>hrf:www.github.com>bg:blue some text inside /div
+div>bg:blue some text inside /div
+div>bg:blue>cl:orange some text inside /div
+div>fs:14px some text inside /div
+# just a comment
+hr
+no comment!
+no  comment!
+no   comment!
+/bod
+/htm

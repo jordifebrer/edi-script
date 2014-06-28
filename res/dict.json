@@ -1,0 +1,58 @@
+{
+    "html": {
+        "doc": "!DOCTYPE html",
+        "htm": "html",
+        "hea": "head",
+        "bod": "body",
+        "scr": "script",
+        "spa": "span",
+        "div": "div",
+        "br": "br",
+        "hr": "hr",
+        "b": "b",
+        "img": "img",
+        "str": "strong",
+        "a": "a",
+        "tit": "title",
+        "tb": "table",
+        "tr": "tr",
+        "td": "td",
+        "but": "button",
+        "inp": "input",
+        "tex": "textarea",
+        "ul": "ul",
+        "ol": "ol",
+        "li": "li",
+        "u": "u",
+        "p": "p",
+        "lin": "link",
+        "bli": "blink",
+        "h1": "h1",
+        "h2": "h2",
+        "h3": "h3",
+        "h4": "h4",
+        "h5": "h5",
+        "h6": "h6"
+    },
+    "script": {
+        "pr": "console.log",
+        "er": "console.error",
+        "wr": "console.warn",
+        "al": "alert"
+    },
+    "attr": {
+        "id": "id",
+        "src": "src",
+        "hrf": "href",
+        "rel": "rel",
+        "typ": "type"
+    },
+    "css": {
+        "bg": "background",
+        "cl": "color",
+        "fs": "font-size",
+        "brd": "border",
+        "brs": "border-style",
+        "brc": "border-color"
+    }
+}

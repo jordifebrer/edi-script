@@ -1,0 +1,17 @@
+doc
+htm
+hea
+/hea
+bod
+div>id:hola>bg:blue
+h1>cl:white title h1/
+div/
+scr
+al 'Hello'
+scr/
+p>cl:brown chocolate p/
+tb tr td>bg:green some_text some_word  td/ tr/ tb/
+tb tr td>bg:red some_text td another_text tr/ tb/
+p some text p/
+#p comment p/
+//p COMMENT p/

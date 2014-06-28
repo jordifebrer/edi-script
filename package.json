@@ -1,0 +1,21 @@
+{
+  "author": "Jordi Febrer",
+  "name": "edi-script",
+  "description": "Node application to translate an edi-script file to a web static files: html, css, js.,",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jordifebrer/edi-script.git"
+  },
+  "main": "./lib/edi-script",
+  "bin": {
+    "edi": "./bin/edi"
+  },
+  "dependencies": {
+    "byline": "~4.1.1",
+    "coffee-script": "~1.7.1"
+  },
+  "engines": {
+    "node": "*"
+  }
+}
