@@ -45,7 +45,20 @@
         "src": "src",
         "hrf": "href",
         "rel": "rel",
-        "typ": "type"
+        "typ": "type",
+        "ng-app": "ng-app",
+        "ng-controller": "ng-controller",
+        "ng-if": "ng-if",
+        "ng-show": "ng-show",
+        "ng-hide": "ng-hide",
+        "ng-class": "ng-class",
+        "ng-src": "ng-src",
+        "ng-value": "ng-value",
+        "ng-model": "ng-model",
+        "ng-repeat": "ng-repeat",
+        "ng-init": "ng-init",
+        "ng-form": "ng-form",
+        "ng-submit": "ng-submit"
     },
     "css": {
         "bg": "background",

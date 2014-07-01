@@ -32,7 +32,10 @@ exports.autoCompleteHtml = (token, needs) ->
     needs.missing = ['td']
     needs.td--
 
-  if needs.td > 0 and ((token.type is 'open' and token.plainHtml is 'tr') or (token.type is 'close' and token.plainHtml is 'table'))
+  if needs.td > 0 and (
+      (token.type is 'open' and token.plainHtml is 'tr') or
+      (token.type is 'close' and token.plainHtml is 'table')
+    )
     needs.missing = ['td', 'tr']
     needs.td--
     needs.tr--
@@ -78,7 +81,6 @@ exports.getFilename = (args) ->
     dirArr = args[2].split '/'
     filenameArr = dirArr[dirArr.length - 1].split '.'
     filenameArr[0]
-
   else
     console.error 'Invalid number of arguments'
     process.exit()
@@ -111,20 +113,30 @@ exports.getTagAttributes = (key, liveTagsArr, dict, separators) ->
     for i in [0...tagArr.length]
       attrArr = tagArr[i].split ':'
       unless dict.attr[attrArr[0]] is `undefined` 
-        attributes.attr.push separators.space + dict.attr[attrArr[0]] + '="' + attrArr[1] + '"'
+        attributes.attr.push separators.space + dict.attr[attrArr[0]] +
+          '="' + attrArr[1] + '"'
       unless dict.css[attrArr[0]] is `undefined`
-        cssPropStr += separators.newLine + separators.tab + dict.css[attrArr[0]] + ': ' + attrArr[1] + ';'
+        cssPropStr += separators.newLine + separators.tab +
+          dict.css[attrArr[0]] + ': ' + attrArr[1] + ';'
 
     if cssPropStr
-      attributes.css += liveTagsArr.join(' ') + ' ' + dict.html[key] + ' {' + cssPropStr + separators.newLine + '}' + separators.newLine + separators.newLine
+      attributes.css += liveTagsArr.join(' ') + separators.space +
+        dict.html[key] + ' {' + cssPropStr + separators.newLine + '}' +
+        separators.newLine + separators.newLine
 
   attributes
 
-exports.setAssets = (name, separators) ->
-  out  = separators.tab + "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/#{name}.css\"></link>" + separators.newLine
+exports.setAssets = (name, flags, separators) ->
+  out  = separators.tab +
+    "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/#{name}.css\"></link>" +
+    separators.newLine
+  if flags.angular
+     out += separators.tab +
+       "<script src=\"http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js\"></script>" +
+       separators.newLine
   out += separators.tab + "<script src=\"js/#{name}.js\"></script>" + separators.newLine
 
-exports.parseTag = (str, type, attributes, needs, spaces, tagIdent, flags, dict, separators) ->
+exports.parseTag = (token, needs, spaces, tagIdent, flags, dict, separators) ->
   outObj =
     tagIdent: tagIdent
     needs: needs
@@ -132,47 +144,50 @@ exports.parseTag = (str, type, attributes, needs, spaces, tagIdent, flags, dict,
     out: ''
     flags: flags
 
-  switch type
+  switch token.type
 
     when 'open'
-      tagIdent = tagIdent + exports.getIdent(str)
-      if (str is 'scr' and attributes.attr.length == 0)
+      tagIdent = tagIdent + exports.getIdent(token.plainKey)
+      if (token.plainKey is 'scr' and token.attributes.attr.length == 0)
         outObj.flags.script = true
       else
         if needs.missing.length > 0
           tagIdent--
           for miss in needs.missing
-            outObj.out += exports.getTag miss, attributes.attr, dict, false
-        outObj.out += exports.getTag str, attributes.attr, dict, true
+            outObj.out += exports.getTag miss, token.attributes.attr, dict, false
+        outObj.out += exports.getTag token.plainKey, token.attributes.attr, dict, true
 
       outObj.tagIdent = tagIdent
       outObj.needs = needs
       outObj.needs.missing = []
 
     when 'close'
-      tagIdent = tagIdent - exports.getIdent(str)
+      tagIdent = tagIdent - exports.getIdent(token.plainKey)
       if outObj.flags.script
         outObj.flags.script = false
       else
         if needs.missing.length > 0
           tagIdent--
           for miss in needs.missing
-            outObj.out += exports.getTag miss, attributes.attr, dict, false
-        outObj.out += exports.getTag str, attributes.attr, dict, false
+            outObj.out += exports.getTag miss, token.attributes.attr, dict, false
+        outObj.out += exports.getTag token.plainKey, token.attributes.attr, dict, false
 
       outObj.tagIdent = tagIdent
       outObj.needs = needs
       outObj.needs.missing = []
 
-
     when 'text'
       outObj.out = separators.space
-      if str
+      if token.plainKey
         if spaces > 0
-          outObj.out = separators.space + str
+          outObj.out = separators.space + token.plainKey
         else
           outObj.spaces++
-          outObj.out = str
+          outObj.out = token.plainKey
+
+  if token.plainKey is 'hea'
+    if /ng-app/.test token.attributes.attr
+      outObj.flags.angular = true
 
   outObj
 
@@ -192,10 +207,12 @@ exports.setFinalHtml = (tokens, separators) ->
     if token.type is 'close'
       closeTagsArr.push token.plainKey
 
-  if 'body' not in closeTagsArr
+  if '/bod' not in closeTagsArr
     out += "</body>" + separators.newLine
-  if 'html' not in closeTagsArr
+  if '/htm' not in closeTagsArr
     out += "</html>" + separators.newLine
+
+  out
 
 exports.repeat = (n, separators) ->
   Array(n).join separators.tab

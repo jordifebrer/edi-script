@@ -31,9 +31,11 @@ class Token
       for i in [0...tagArr.length]
         attrArr = tagArr[i].split ':'
         if dict.attr[attrArr[0]]
-          attributes.attr.push separators.space + dict.attr[attrArr[0]] + '="' + attrArr[1] + '"'
+          attributes.attr.push separators.space +
+            dict.attr[attrArr[0]] + '="' + attrArr[1] + '"'
         if dict.css[attrArr[0]]
-          cssPropStr += separators.newLine + separators.tab + dict.css[attrArr[0]] + ': ' + attrArr[1] + ';'
+          cssPropStr += separators.newLine + separators.tab +
+            dict.css[attrArr[0]] + ': ' + attrArr[1] + ';'
 
       if cssPropStr
         attributes.css += '' +

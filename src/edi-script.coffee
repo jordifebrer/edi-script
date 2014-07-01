@@ -19,6 +19,7 @@ exports.run = ->
     flags:
       assets: false
       script: false
+      angular: false
     needs:
       td: 0
       tr: 0
@@ -42,7 +43,7 @@ exports.run = ->
 
     if not envs.flags.assets
       if line.trim() is '/hea' or line.trim() is '/bod'
-        htmlStr += utils.setAssets name, utils.separators
+        htmlStr += utils.setAssets name, envs.flags, utils.separators
         envs.flags.assets = true
 
     # check for a comment line
@@ -64,8 +65,8 @@ exports.run = ->
             liveTagsArr = utils.registerTag token.plainHtml, token.type, liveTagsArr
             envs.needs = utils.autoCompleteHtml(token, envs.needs)
 
-          parsedObj = utils.parseTag token.plainKey, token.type, token.attributes, envs.needs, 
-          spaces, envs.tagIdent, envs.flags, dict, utils.separators
+          parsedObj = utils.parseTag token, envs.needs, spaces, envs.tagIdent,
+            envs.flags, dict, utils.separators
           
           envs.tagIdent = parsedObj.tagIdent
           envs.needs = parsedObj.needs
@@ -80,9 +81,11 @@ exports.run = ->
       if res.trim()
         ident = if res[0...2] is '</' then envs.lineIdent - 1 else envs.lineIdent
         if envs.flags.script and line not in ['scr']
-          scriptStr += utils.preParseScr(res, dict.script) + utils.separators.newLine
+          scriptStr += utils.preParseScr(res, dict.script) +
+            utils.separators.newLine
         else
-          htmlStr += (utils.repeat ident, utils.separators) + res + utils.separators.newLine
+          htmlStr += (utils.repeat ident, utils.separators) +
+            res + utils.separators.newLine
 
       envs.lineIdent = envs.tagIdent
 
