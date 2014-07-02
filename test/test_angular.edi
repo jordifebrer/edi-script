@@ -1,0 +1,31 @@
+htm>ng-app:testApp
+hea
+/hea
+bod>bg:#bbb
+p>fs:50px>cl:black Testing paragraph.. /p
+scr
+
+angular.module('testApp', [])
+.controller 'testCtrl', ($scope) ->
+
+  $scope.elements = [
+    {
+      name: "Scotland JS"
+    },
+    {
+      name: "AngularJS Docs"
+    },
+    {
+      name: "AngularJS Daily"
+    }
+  ]
+
+/scr
+div>ng-controller:testCtrl>
+p>ng-repeat:'element in elements' {{element.name}} /p
+div/
+tb>brd:12px>brs:solid>brc:orange
+tr td just_a_field td/ tr/
+tb/
+/bod
+/htm

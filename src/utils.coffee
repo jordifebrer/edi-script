@@ -1,10 +1,7 @@
-# The `utils` module are a group of unclassified utility structs and 
+# The `utils` module are a group of unclassified utility structs and
 # functions that will be moved soon into classes
 
 exports = () ->
-
-exports.getArguments = ->
-  process.argv
 
 exports.separators =
   tab: '\t'
@@ -12,6 +9,9 @@ exports.separators =
   newLine: '\n'
   leftBrace: '{'
   rightBrace: '}'
+
+exports.getArguments = ->
+  process.argv
 
 exports.autoCompleteHtml = (token, needs) ->
 
@@ -40,41 +40,11 @@ exports.autoCompleteHtml = (token, needs) ->
     needs.td--
     needs.tr--
 
-  if needs.tr > 0 and token.plainHtml is 'table' 
+  if needs.tr > 0 and token.plainHtml is 'table'
     needs.missing = ['tr']
     needs.tr--
 
   needs
-
-exports.preParseScr = (str, dict) ->
-  exports.preParseJs(exports.preParseCoffee(str, dict), dict)
-
-exports.preParseCoffee = (str, dict) ->
-    
-  lineArr = str.split ' '
-  res = ''
-  for i in [0...lineArr.length]
-    res += lineArr[i].replace /(.*)/, (s, key) ->
-      unless dict[s] is `undefined`
-        dict[s] + " "
-      else
-        key + " "
-  res
-
-exports.preParseJs = (str, dict) ->
-    
-  lineArr = str.split '('
-  res = ''
-  for i in [0...lineArr.length]
-    res += lineArr[i].replace /(.*)/, (s, key) ->
-      unless dict[s] is `undefined`
-        dict[s] + " "
-      else
-        unless i == 0
-          "(" + key
-        else
-          key
-  res
 
 exports.getFilename = (args) ->
   if /.edi/.test args[2]
@@ -96,45 +66,18 @@ exports.getIdent = (key) ->
   if key in ['hr', 'br', 'doc'] then 0 else 1
 
 exports.getTag = (key, attributes, dict, isOpenTag) ->
-  if isOpenTag then '<' + dict.html[key] + attributes + '>' 
+  if isOpenTag then '<' + dict.html[key] + attributes + '>'
   else '</' + dict.html[key.replace '/',''] + attributes + '>'
-
-exports.getTagAttributes = (key, liveTagsArr, dict, separators) ->
-  attributes =
-    attr: []
-    css: ''
-  cssPropStr = ''
-
-  if />/i.test(key)
-    tagArr = key.split '>'
-    key = tagArr[0]
-    tagArr = tagArr.splice(1)
-  
-    for i in [0...tagArr.length]
-      attrArr = tagArr[i].split ':'
-      unless dict.attr[attrArr[0]] is `undefined` 
-        attributes.attr.push separators.space + dict.attr[attrArr[0]] +
-          '="' + attrArr[1] + '"'
-      unless dict.css[attrArr[0]] is `undefined`
-        cssPropStr += separators.newLine + separators.tab +
-          dict.css[attrArr[0]] + ': ' + attrArr[1] + ';'
-
-    if cssPropStr
-      attributes.css += liveTagsArr.join(' ') + separators.space +
-        dict.html[key] + ' {' + cssPropStr + separators.newLine + '}' +
-        separators.newLine + separators.newLine
-
-  attributes
 
 exports.setAssets = (name, flags, separators) ->
   out  = separators.tab +
-    "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/#{name}.css\"></link>" +
+    "<link rel=\"stylesheet\" type=\"text/css\" href=\"#{name}.css\"></link>" +
     separators.newLine
   if flags.angular
      out += separators.tab +
        "<script src=\"http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js\"></script>" +
        separators.newLine
-  out += separators.tab + "<script src=\"js/#{name}.js\"></script>" + separators.newLine
+  out += separators.tab + "<script src=\"#{name}.js\"></script>" + separators.newLine
 
 exports.parseTag = (token, needs, spaces, tagIdent, flags, dict, separators) ->
   outObj =
@@ -185,7 +128,7 @@ exports.parseTag = (token, needs, spaces, tagIdent, flags, dict, separators) ->
           outObj.spaces++
           outObj.out = token.plainKey
 
-  if token.plainKey is 'hea'
+  if token.plainKey is 'htm'
     if /ng-app/.test token.attributes.attr
       outObj.flags.angular = true
 
@@ -202,7 +145,7 @@ exports.registerTag = (tag, type, liveTagsArr) ->
 exports.setFinalHtml = (tokens, separators) ->
   out = ''
   closeTagsArr = []
-  
+
   for token in tokens
     if token.type is 'close'
       closeTagsArr.push token.plainKey

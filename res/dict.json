@@ -34,12 +34,6 @@
         "h5": "h5",
         "h6": "h6"
     },
-    "script": {
-        "pr": "console.log",
-        "er": "console.error",
-        "wr": "console.warn",
-        "al": "alert"
-    },
     "attr": {
         "id": "id",
         "src": "src",

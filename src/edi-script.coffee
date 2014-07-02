@@ -3,7 +3,10 @@
 
 fs = require 'fs'
 byline = require 'byline'
+cleanCSS = require 'clean-css'
 coffee = require 'coffee-script'
+uglifyJS = require 'uglify-js'
+
 dict = require '../res/dict.json'
 utils = require './utils'
 Token = require './token'
@@ -48,17 +51,16 @@ exports.run = ->
 
     # check for a comment line
     unless line[0...1] is '#' or line[0...2] is '//'
-      
+
       spaces = 0
-      lineArr = line.split utils.separators.space
-      
+      lineArr = line.split /\s(?=(?:[^']|'[^']*')*$)/
       for i in [0...lineArr.length]
 
         res += lineArr[i].replace /(.*)/, (s, key) ->
 
           #loop token
           token = new Token(key, liveTagsArr)
-          
+
           cssStr += token.attributes.css
 
           if not token.isSpecial
@@ -67,7 +69,7 @@ exports.run = ->
 
           parsedObj = utils.parseTag token, envs.needs, spaces, envs.tagIdent,
             envs.flags, dict, utils.separators
-          
+
           envs.tagIdent = parsedObj.tagIdent
           envs.needs = parsedObj.needs
           envs.flags = parsedObj.flags
@@ -81,8 +83,7 @@ exports.run = ->
       if res.trim()
         ident = if res[0...2] is '</' then envs.lineIdent - 1 else envs.lineIdent
         if envs.flags.script and line not in ['scr']
-          scriptStr += utils.preParseScr(res, dict.script) +
-            utils.separators.newLine
+          scriptStr += line
         else
           htmlStr += (utils.repeat ident, utils.separators) +
             res + utils.separators.newLine
@@ -90,13 +91,19 @@ exports.run = ->
       envs.lineIdent = envs.tagIdent
 
   stream.on 'end', () ->
-    htmlStr += utils.setFinalHtml tokens, utils.separators
+
     # html
+    htmlStr += utils.setFinalHtml tokens, utils.separators
     htmlStream.write htmlStr
-    # js
-    jsStream.write coffee.compile scriptStr
-    # css
-    cssStream.write cssStr
+
+    # js/css
+    outJS = coffee.compile scriptStr
+    outCSS = cssStr
+    if args[3] is '-m'
+      outJS = uglifyJS.minify(outJS, {fromString: true}).code
+      outCSS = cleanCSS().minify outCSS
+    jsStream.write outJS
+    cssStream.write outCSS
 
   stream.on 'error', (error, code) ->
     console.log error + ": " + code
