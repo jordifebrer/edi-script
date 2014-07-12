@@ -3,17 +3,13 @@ hea
 /hea
 bod>bg:#bbb
 p>fs:50px>cl:black Testing paragraph.. /p
-scr
 pr 'just new paragraph'
-#al 'flying free'
-wr('some warning')
-er('some error')
-console.log('first console log message');
-console.log 'second console log message'
-console.log 'third console log message'
+scr
+console.log('first message');
+console.log 'second message'
 /scr
 tb>brd:12px>brs:solid>brc:orange
-tr td just_a_field td/ tr/
-tb/
+tr td just_a_field /td /tr
+/tb
 /bod
 /htm

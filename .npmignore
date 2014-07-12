@@ -9,3 +9,6 @@ testing.js
 .DS_Store
 .travis.yml
 Contributing.md
+Vagrantfile
+.vagrant/
+scripts/
